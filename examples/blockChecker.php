@@ -1,15 +1,18 @@
 <?php
-require_once('../src/whatsprot.class.php');
+
+require_once '../src/Registration.php';
 require '../src//events/MyEvents.php';
 
 $debug = true;
 
 function onCredentialsBad($mynumber, $status, $reason)
 {
-    if ($reason == 'blocked')
+    if ($reason == 'blocked') {
         echo "\n\nYour number is blocked \n";
-    if ($reason == 'incorrect')
+    }
+    if ($reason == 'incorrect') {
         echo "\n\nWrong identity. \n";
+    }
 }
 
 function onCredentialsGood($mynumber, $login, $password, $type, $expiration, $kind, $price, $cost, $currency, $price_expiration)
@@ -26,11 +29,8 @@ echo "####################\n";
 echo "\n\nUsername (country code + number without + or 00): ";
 $username = trim(fgets(STDIN));
 
-$w = new WhatsProt($username, '', $debug);
-$w->eventManager()->bind("onCredentialsBad", "onCredentialsBad");
-$w->eventManager()->bind("onCredentialsGood", "onCredentialsGood");
-
+$w = new Registration($username, $debug);
+$w->eventManager()->bind('onCredentialsBad', 'onCredentialsBad');
+$w->eventManager()->bind('onCredentialsGood', 'onCredentialsGood');
 
 $w->checkCredentials();
-
-?>
